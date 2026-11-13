@@ -1,0 +1,57 @@
+{
+  "linux-x64-python": {
+    "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261013/cpython-3.13.16%2B20261013-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz",
+    "hash": "d0080766b6b74aeb81e1949ef0d9a20e6c17f7b160fb295a69b936ccb17660be",
+    "algorithm": "sha256"
+  },
+  "linux-x64-dotnet": {
+    "url": "https://builds.dotnet.microsoft.com/dotnet/Runtime/8.0.32/dotnet-runtime-8.0.32-linux-x64.tar.gz",
+    "hash": "639a17d84e4d52fecd62c7d4e528e7bc0ae3c9860de2530cb41a2ee7196b69ea18271d8795849180742770e25b4f913df292a5a236fa197cf5d3cd0ec5ba665f",
+    "algorithm": "sha512"
+  },
+  "windows-x64-python": {
+    "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261013/cpython-3.13.16%2B20261013-x86_64-pc-windows-msvc-install_only_stripped.tar.gz",
+    "hash": "7aba3985d4cee1c7cacb963ca6aa08a5d3e695d7f9609d9fabc56f22ddcf5a06",
+    "algorithm": "sha256"
+  },
+  "windows-x64-dotnet": {
+    "url": "https://builds.dotnet.microsoft.com/dotnet/Runtime/8.0.32/dotnet-runtime-8.0.32-win-x64.zip",
+    "hash": "f0349e793d8081c682c01d736db695c9c1ec268c6173648913543db219e44cbf2e952c7ef94fc37946b0f2bb95ca1898d972a43591b8e44d5a1659f4911904c0",
+    "algorithm": "sha512"
+  },
+  "linux-x64-piper": {
+    "url": "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_x86_64.tar.gz",
+    "hash": "a50cb45f355b7af1f6d758c1b360717877ba0a398cc8cbe6d2a7a3a26e225992",
+    "algorithm": "sha256"
+  },
+  "windows-x64-piper": {
+    "url": "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_windows_amd64.zip",
+    "hash": "f3c58906402b24f3a96d92145f58acba6d86c9b5db896d207f78dc80811efcea",
+    "algorithm": "sha256"
+  },
+  "voice-ru_RU-dmitri-medium.onnx": {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx",
+    "hash": "f073356ebc4bd0f80c5af58df2953a5988bd5bdab1eb38635ce960b071fbefcb",
+    "algorithm": "sha256"
+  },
+  "voice-ru_RU-dmitri-medium.onnx.json": {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx.json",
+    "hash": "667ef3117bc642c2892dff7690d8bdc8ca4228aeaa783b2dc1416df632855e0d",
+    "algorithm": "sha256"
+  },
+  "voice-MODEL_CARD": {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/MODEL_CARD",
+    "hash": "6d59c756776d57860232cea6484e1b2ea1fc1c8d2c3446ef246f706fd9875821",
+    "algorithm": "sha256"
+  },
+  "windows-x64-vcredist": {
+    "url": "https://download.visualstudio.microsoft.com/download/pr/990c720a-46ce-4dc7-87b9-c2eb615d34b9/CC0FF0EB1DC3F5188AE6300FAEF32BF5BEEBA4BDD6E8E445A9184072096B713B/VC_redist.x64.exe",
+    "hash": "cc0ff0eb1dc3f5188ae6300faef32bf5beeba4bdd6e8e445a9184072096b713b",
+    "algorithm": "sha256"
+  },
+  "espeak-source": {
+    "url": "https://github.com/rhasspy/espeak-ng/archive/0f65aa301e0d6bae5e172cc74197d32a6182200f.zip",
+    "hash": "150fc955926a084a77ebe25c9e8287bde2e2a17bbf9b23a25c147b556837949f",
+    "algorithm": "sha256"
+  }
+}

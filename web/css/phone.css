@@ -1,0 +1,326 @@
+/* Экран телефона. Видео здесь нет и не будет — оно идёт в окне игры.
+   Оформление: чёрная шапка, тёмно-серый фон, жёлтые подписи, белые поля
+   и тёмно-красные кнопки с жёлтой каймой. Шрифты только системные —
+   телефоны в локальной сети могут быть без интернета. */
+.phone {
+  --bg: #222222;
+  --panel: #2c2c2c;
+  --panel-2: #333333;
+  --line: #4a4a4a;
+  --ink: #f2f2f2;
+  --muted: #a8a8a8;
+  --accent: #ffc20e;
+  --accent-ink: #1a1200;
+  --red-1: #6e0000;
+  --red-2: #a30000;
+  --red-edge: #f6e58d;
+  --radius: 6px;
+  /* Узкая колонка по центру: шапка, меню и экраны выравниваются по ней.
+     --edge — отступ от края до колонки, на телефоне он равен --gutter. */
+  --column: 25rem;
+  --gutter: 1.25rem;
+  --edge: max(var(--gutter), calc((100% - var(--column)) / 2));
+  --display: "Bebas Neue", "Oswald", "Roboto Condensed", "sans-serif-condensed",
+             "Arial Narrow", "AvenirNextCondensed-Bold", "Helvetica Neue", Impact, sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--bg);
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* ---------- шапка ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #000;
+  padding: calc(.75rem + env(safe-area-inset-top)) var(--edge) .75rem;
+  border-bottom: 1px solid #333;
+}
+.logo {
+  font-family: var(--display);
+  font-weight: 800;
+  font-stretch: condensed;
+  font-size: 1.45rem;
+  letter-spacing: .02em;
+  line-height: 1;
+  text-transform: uppercase;
+  user-select: none;
+}
+.logo-local { color: #fff; margin-right: .22em; }
+.logo-dub { color: var(--accent); }
+
+.phone .burger {
+  margin-right: -11px; /* сама иконка — по краю колонки */
+  display: grid;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  place-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius);
+}
+.phone .burger:hover:not(:disabled) { background: #1a1a1a; }
+.burger span {
+  display: block;
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+  background: #fff;
+  transition: transform .15s ease, opacity .15s ease;
+}
+.burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: grid;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, .5);
+  background: #000;
+  border-bottom: 1px solid #333;
+}
+.phone .menu button {
+  background: none;
+  border: none;
+  border-radius: 0;
+  border-top: 1px solid #1c1c1c;
+  text-align: left;
+  padding: 1rem var(--edge);
+  font-family: var(--display);
+  font-weight: 700;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  font-size: 1.1rem;
+}
+.phone .menu button:hover:not(:disabled) { background: #141414; color: var(--accent); }
+
+/* Имя игрока и раунд — под шапкой, когда игрок уже вошёл. */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .7rem var(--edge);
+  border-bottom: 1px solid var(--line);
+  font-size: .95rem;
+}
+.bar .me { font-weight: 700; }
+.bar .round { margin-left: auto; color: var(--muted); }
+.badge {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: 3px;
+  padding: .1em .5em;
+  font-family: var(--display);
+  font-weight: 800;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  font-size: .8rem;
+  letter-spacing: .04em;
+}
+
+/* ---------- экраны ---------- */
+#app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: calc(var(--column) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 1.6rem var(--gutter);
+}
+
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  animation: rise .18s ease;
+}
+/* Форма входа — по центру экрана, но не выше трети: на телефоне с
+   клавиатурой она не должна уезжать за край. */
+.screen.join { gap: 1.4rem; padding-bottom: 12vh; }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+
+h1, h2, .title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+.title {
+  text-align: center;
+  font-size: 2.1rem;
+  color: #e6e6e6;
+  padding-bottom: 1.1rem;
+  border-bottom: 2px solid #4d4d4d;
+  margin-bottom: .4rem;
+}
+
+.field { display: grid; gap: .65rem; font-size: .9rem; color: var(--muted); }
+.label {
+  font-family: var(--display);
+  font-weight: 800;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  font-size: 1.35rem;
+  color: var(--accent);
+}
+.join .label::after { content: ':'; }
+.hint { font-size: .85rem; color: var(--muted); }
+
+/* Поля — белые с чёрным текстом. */
+.phone input[type="text"], .phone textarea {
+  background: #fff;
+  color: #111;
+  border: none;
+  border-radius: var(--radius);
+  padding: .85em 1.05em;
+  font-size: 1.05rem;
+}
+.phone input[type="text"]::placeholder, .phone textarea::placeholder { color: #8a8a8a; }
+.phone input[type="text"]:focus, .phone textarea:focus {
+  outline: 3px solid var(--accent);
+  outline-offset: 0;
+}
+input.code { text-transform: uppercase; letter-spacing: .08em; }
+
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: .8rem; }
+.count { font-variant-numeric: tabular-nums; }
+.err { color: #ff6b5b; font-size: .9rem; margin: -.4rem 0; }
+.err:empty { display: none; }
+
+/* ---------- кнопки ---------- */
+.phone button {
+  border-radius: var(--radius);
+  background: #3a3a3a;
+  border-color: #555;
+}
+.phone button:hover:not(:disabled) { background: #444; border-color: #666; }
+
+/* Главная кнопка — тёмно-красная, светлее к центру, с жёлтой каймой. */
+.phone button.primary {
+  background: radial-gradient(ellipse at center, var(--red-2) 0%, #8a0000 45%, var(--red-1) 100%);
+  border: 2px solid var(--red-edge);
+  color: #fff;
+  font-family: var(--display);
+  font-weight: 800;
+  font-stretch: condensed;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: 1.3rem;
+  padding: .7em 1.2em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+}
+.phone button.primary:hover:not(:disabled) {
+  background: radial-gradient(ellipse at center, #c00000 0%, #9a0000 45%, #7a0000 100%);
+  border-color: #fff3b0;
+}
+.block { width: 100%; }
+
+/* ---------- ожидание ---------- */
+.big-emoji { font-size: 3.4rem; text-align: center; line-height: 1; }
+.screen h2 { text-align: center; font-size: 1.9rem; }
+.screen h2.title { font-size: 2.1rem; }
+.screen > p { text-align: center; }
+.small { font-size: .86rem; }
+
+.players { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
+.players li {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .4em .9em;
+  font-size: .92rem;
+}
+.players li.host { border-color: var(--accent); }
+.players li.host::before { content: '★ '; color: var(--accent); }
+.players li.gone { opacity: .45; }
+
+/* ---------- реплика ---------- */
+.scene {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: .9rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  max-height: 38vh;
+  overflow-y: auto;
+  color: var(--muted);
+}
+.scene b, .scene strong { color: var(--ink); }
+.scene .gap, .scene mark {
+  display: inline-block;
+  background: none;
+  color: var(--accent);
+  font-weight: 700;
+  border-bottom: 2px solid currentColor;
+  min-width: 6ch;
+}
+
+textarea { min-height: 5.5em; }
+
+.quote {
+  margin: 0;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: .9rem 1rem;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+/* ---------- голосование ---------- */
+.votes { display: grid; gap: .7rem; }
+.phone .vote-btn {
+  text-align: left;
+  padding: 1rem 1.1rem;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  width: 100%;
+  background: var(--panel);
+}
+.phone .vote-btn.chosen { border: 2px solid var(--accent); background: #3a2f0c; }
+
+.row { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
+.row .grow { flex: 1; }
+
+.sfx-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: .6rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.sfx-list button { width: 100%; padding: .8em .6em; font-size: .95rem; }
+
+.foot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .6rem 1.1rem;
+  min-height: 2.6rem;
+}
+.pill.warn { border-color: var(--accent); color: var(--accent); background: #2c2c2c; }
+
+@media (max-width: 380px) {
+  .phone { --gutter: 1rem; }
+  #app { padding-top: 1.2rem; padding-bottom: 1.2rem; }
+  .title { font-size: 1.8rem; }
+}

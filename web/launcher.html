@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LocalDub</title>
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="stylesheet" href="/static/css/launcher.css">
+</head>
+<body class="launcher">
+
+<header class="top">
+  <div class="brand">
+    <h1 data-i18n="app">LocalDub</h1>
+    <p class="muted" data-i18n="tagline"></p>
+  </div>
+  <button id="gearBtn" class="gear" aria-label="Настройки" title="Настройки">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+      <path d="M19.4 13a7.7 7.7 0 0 0 0-2l2-1.5-2-3.4-2.3 1a7.6 7.6 0 0 0-1.7-1l-.3-2.5h-4l-.3 2.5a7.6 7.6 0 0 0-1.7 1l-2.3-1-2 3.4L4.6 11a7.7 7.7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7.6 7.6 0 0 0 1.7 1l.3 2.5h4l.3-2.5a7.6 7.6 0 0 0 1.7-1l2.3 1 2-3.4z"/>
+    </svg>
+    <span data-i18n="settings">Настройки</span>
+  </button>
+</header>
+
+<main class="stage">
+  <section class="hero card" aria-labelledby="heroTitle">
+    <div class="hero-top">
+      <p class="eyebrow" data-i18n="local_game">Локальная игра</p>
+      <span class="session-badge" id="sessionBadge" role="status"></span>
+    </div>
+    <div class="hero-center">
+      <h2 id="heroTitle" data-i18n="hero_idle">Вечер начинается здесь</h2>
+      <p class="hero-subtitle muted" id="heroSubtitle" data-i18n="hero_hint"></p>
+      <button id="startBtn" class="start" data-i18n="start">Запустить игру</button>
+      <p class="status muted" id="statusLine" role="status" aria-live="polite"></p>
+      <p class="notice muted" id="noticeLine"></p>
+    </div>
+  </section>
+
+  <section class="install hidden" id="findBox">
+    <h2 data-i18n="find_prompt">Где лежит игра?</h2>
+    <p class="muted small" data-i18n="find_explain"></p>
+    <input type="text" id="findPath" spellcheck="false" autocomplete="off"
+           placeholder="…/steamapps/common/WhatTheDub">
+    <button class="primary hidden" id="findBrowse" data-i18n="find_browse"></button>
+    <span class="muted small" id="findNote"></span>
+  </section>
+
+  <section class="install hidden" id="installBox">
+    <h2 data-i18n="install_prompt">Установить патч на What The Dub?</h2>
+    <p class="muted small" data-i18n="install_explain"></p>
+    <button class="primary" id="installBtn" data-i18n="install_button">Установить</button>
+    <span class="muted small" id="installNote"></span>
+  </section>
+
+  <section class="join card is-idle" id="joinBox" aria-labelledby="joinTitle">
+    <div class="join-copy">
+      <h2 class="eyebrow" id="joinTitle" data-i18n="join_here">Адрес для игроков</h2>
+      <div class="join-url" id="joinUrl">—</div>
+      <div class="room hidden" id="roomBox">
+        <span class="muted small" data-i18n="room_code">Код комнаты</span>
+        <b id="roomCode"></b>
+      </div>
+      <p class="muted small" data-i18n="join_hint"></p>
+      <p class="copy-note muted small" id="copyNote" role="status" aria-live="polite"></p>
+    </div>
+    <button id="copyAddress" class="ghost" data-i18n="copy_address" disabled>Копировать</button>
+    <div class="qr hidden" id="qrBox" aria-label="QR-код для подключения"></div>
+  </section>
+  <p class="app-note muted small" data-i18n="local_hint"></p>
+</main>
+
+<!-- Настройки -->
+<div class="overlay hidden" id="overlay"></div>
+<aside class="panel hidden" id="panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="panel-head">
+    <h2 id="settingsTitle" data-i18n="settings">Настройки</h2>
+    <button id="closeBtn" class="ghost" data-i18n="close">Закрыть</button>
+  </div>
+
+  <label class="field">
+    <span data-i18n="room_code">Код комнаты</span>
+    <input type="text" id="roomInput" class="room-input" maxlength="8" spellcheck="false"
+           autocomplete="off" data-i18n-ph="room_code_ph">
+    <span class="muted small" id="roomNote" data-i18n="room_code_hint"></span>
+  </label>
+
+  <label class="field">
+    <span data-i18n="voice">Голос</span>
+    <select id="voiceSel"></select>
+  </label>
+
+  <div class="field piper hidden" id="piperRow">
+    <span class="muted small" id="piperNote"></span>
+    <button id="piperGetBtn" class="ghost hidden" data-i18n="piper_download"></button>
+    <input type="text" id="piperDir" spellcheck="false" autocomplete="off"
+           data-i18n-ph="piper_dir">
+  </div>
+
+  <label class="field">
+    <span data-i18n="language">Язык</span>
+    <select id="langSel">
+      <option value="ru">Русский</option>
+      <option value="en">English</option>
+    </select>
+  </label>
+
+  <hr>
+
+  <div class="field">
+    <span class="row-between">
+      <span data-i18n="game">Игра</span>
+      <span class="pill" id="gamePill"></span>
+    </span>
+    <input type="text" id="gameDir" spellcheck="false" autocomplete="off"
+           data-i18n-ph="game_dir">
+    <button id="browseBtn" class="ghost hidden" data-i18n="game_hint"></button>
+  </div>
+
+  <div class="field">
+    <span class="row-between">
+      <span data-i18n="flavour">Версия игры</span>
+      <span class="pill" id="flavourPill"></span>
+    </span>
+  </div>
+
+  <div class="field">
+    <span class="row-between">
+      <span data-i18n="patch_state">Связь с игрой</span>
+      <span class="pill" id="patchPill"></span>
+    </span>
+    <div class="row">
+      <button id="patchBtn" class="ghost"></button>
+    </div>
+    <span class="muted small" id="patchNote"></span>
+  </div>
+
+  <div class="field">
+    <span class="row-between">
+      <span data-i18n="system">Система</span>
+      <span class="pill" id="sysPill"></span>
+    </span>
+    <input type="text" id="dotnetPath" spellcheck="false" autocomplete="off"
+           data-i18n-ph="dotnet_path">
+    <span class="muted small" id="sysNote"></span>
+  </div>
+
+  <label class="field">
+    <span data-i18n="address">Адрес для друзей</span>
+    <input id="addrInput" type="text" list="addrList" spellcheck="false"
+           data-i18n-ph="address_auto" />
+    <datalist id="addrList"></datalist>
+    <small id="addrNote" class="note"></small>
+  </label>
+
+  <label class="field">
+    <span data-i18n="port">Порт</span>
+    <input type="text" id="portInput" inputmode="numeric" autocomplete="off">
+    <span class="muted small" id="portNote"></span>
+  </label>
+
+  <p class="saved muted small" id="savedNote"></p>
+</aside>
+
+<script>window.HOST_KEY = "{{HOST_KEY}}";</script>
+<script type="module" src="/static/js/launcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>LocalDub</title>
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="stylesheet" href="/static/css/phone.css">
+</head>
+<body class="phone">
+
+<header class="topbar">
+  <span class="logo" aria-label="LocalDub"><span class="logo-local">LOCAL</span><span class="logo-dub">DUB</span></span>
+  <button class="burger" id="menuBtn" aria-expanded="false" aria-controls="menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="menu hidden" id="menu">
+    <button id="reloadBtn" data-i18n="phone_reload">Обновить страницу</button>
+    <button class="hidden" id="leaveBtn" data-i18n="phone_leave">Выйти</button>
+  </nav>
+</header>
+
+<div id="bar" class="bar hidden">
+  <span class="me" id="meName"></span>
+  <span class="badge hidden" id="hostBadge" data-i18n="phone_host">Хост</span>
+  <span class="round" id="roundLabel"></span>
+</div>
+
+<main id="app">
+  <!-- Вход -->
+  <section id="s-join" class="screen join">
+    <h1 class="title" data-i18n="phone_join_title">Присоединиться</h1>
+    <label class="field">
+      <span class="label" data-i18n="phone_name">Имя</span>
+      <input type="text" id="nameInput" maxlength="16" autocomplete="off"
+             autocapitalize="words" enterkeyhint="next" data-i18n-ph="phone_name_ph">
+    </label>
+    <label class="field">
+      <span class="label" data-i18n="phone_code">Код комнаты</span>
+      <input type="text" id="codeInput" class="code" maxlength="8" autocomplete="off"
+             autocapitalize="characters" autocorrect="off" spellcheck="false"
+             enterkeyhint="go">
+      <span class="hint" data-i18n="phone_code_hint"></span>
+    </label>
+    <p class="err" id="joinErr"></p>
+    <button class="primary block" id="joinBtn" data-i18n="phone_join">Играть</button>
+  </section>
+
+  <!-- Ожидание, вступление, просмотр, итоги -->
+  <section id="s-wait" class="screen hidden">
+    <div class="big-emoji" id="waitEmoji">🍿</div>
+    <h2 id="waitTitle"></h2>
+    <p class="muted" id="waitSub"></p>
+    <ul class="players" id="playerList"></ul>
+    <div class="row" id="manageRow"></div>
+  </section>
+
+  <!-- Написание реплики -->
+  <section id="s-write" class="screen hidden">
+    <div class="scene" id="scene"></div>
+    <label class="field">
+      <span class="row-between">
+        <span class="label" data-i18n="phone_write_title">Ваша реплика</span>
+        <span class="count" id="dubCount"></span>
+      </span>
+      <textarea id="dubInput" rows="3" enterkeyhint="send"
+                data-i18n-ph="phone_write_hint"></textarea>
+    </label>
+    <p class="err" id="writeErr"></p>
+    <div class="row">
+      <button id="sfxBtn" class="hidden" data-i18n="phone_sfx">Звуки</button>
+      <button class="primary grow" id="sendBtn" data-i18n="phone_send">Отправить</button>
+    </div>
+  </section>
+
+  <!-- Звуки из игры: вставляются прямо в текст реплики -->
+  <section id="s-sfx" class="screen hidden">
+    <h2 class="title" data-i18n="phone_sfx_title">Вставить звук</h2>
+    <div class="sfx-list" id="sfxList"></div>
+    <button id="sfxClose" data-i18n="phone_close">Закрыть</button>
+  </section>
+
+  <!-- Отправлено -->
+  <section id="s-sent" class="screen hidden">
+    <div class="big-emoji">✅</div>
+    <h2 data-i18n="phone_sent">Отправлено!</h2>
+    <blockquote class="quote" id="sentText"></blockquote>
+    <p class="muted" data-i18n="phone_wait_others"></p>
+    <button id="editBtn" data-i18n="phone_change">Изменить</button>
+  </section>
+
+  <!-- Голосование -->
+  <section id="s-vote" class="screen hidden">
+    <h2 class="title" data-i18n="phone_vote_title">За кого голосуете?</h2>
+    <p class="muted small" id="voteHint"></p>
+    <div class="votes" id="voteList"></div>
+    <button class="primary block hidden" id="voteBtn" data-i18n="phone_vote_send"></button>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="pill warn hidden" id="offline"></span>
+</footer>
+
+<script type="module" src="/static/js/phone.js"></script>
+</body>
+</html>

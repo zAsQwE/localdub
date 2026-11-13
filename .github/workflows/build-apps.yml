@@ -1,0 +1,76 @@
+name: Build apps
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Build tools
+        run: sudo apt-get update && sudo apt-get install -y nsis xvfb libx11-6 libxext6 libxrender1 libxft2 libxss1 libfontconfig1
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/localdub-build
+          key: localdub-runtimes-${{ hashFiles('packaging/runtime-lock.json') }}
+      - name: Backend tests
+        run: python3 tests/run_all.py
+      - name: Build both apps
+        run: python3 tools/build-release.py --target all
+      - name: Test packaged Linux app
+        run: |
+          ./dist/LocalDub-linux-x64.run --extract "$RUNNER_TEMP/LocalDub test"
+          xvfb-run -a "$RUNNER_TEMP/LocalDub test/runtime/python/bin/python3" tests/check_bundle.py "$RUNNER_TEMP/LocalDub test" --gui
+          xvfb-run -a "$RUNNER_TEMP/LocalDub test/runtime/python/bin/python3" tests/test_desktop.py
+      - uses: actions/upload-artifact@v7
+        with:
+          name: LocalDub-apps
+          path: dist/*
+
+  windows-check:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: LocalDub-apps
+          path: dist
+      - name: Test packaged Windows app
+        shell: pwsh
+        run: |
+          $bundle = Join-Path $env:RUNNER_TEMP 'LocalDub test'
+          $exe = (Resolve-Path 'dist/LocalDub-windows-x64.exe').Path
+          $proc = Start-Process $exe -ArgumentList ('/EXTRACT="{0}"' -f $bundle) -Wait -PassThru
+          if ($proc.ExitCode -ne 0) { throw 'LocalDub extraction failed' }
+          & "$bundle/runtime/python/python.exe" -X utf8 tests/check_bundle.py $bundle --gui
+          if ($LASTEXITCODE -ne 0) { throw 'Packaged Windows smoke test failed' }
+          & "$bundle/runtime/python/python.exe" -X utf8 tests/test_desktop.py
+          if ($LASTEXITCODE -ne 0) { throw 'Windows native UI tests failed' }
+
+  release:
+    if: github.event_name == 'release'
+    needs: [build, windows-check]
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: LocalDub-apps
+          path: dist
+      - name: Attach files to this release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$RELEASE_TAG" dist/* --clobber

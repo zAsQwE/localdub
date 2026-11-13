@@ -1,0 +1,35 @@
+# Готовые программы (.exe и .run) весят по 130–170 МБ — GitHub не примет файлы
+# больше 100 МБ. Их выкладывают в Releases: workflow «Build apps» собирает
+# и прикладывает их сам.
+dist/
+
+# Промежуточные файлы сборки — пересоздаются при каждой сборке.
+build/
+wtd/build/
+wtd/patcher/bin/
+wtd/patcher/obj/
+*.part
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Рантайм моста кладётся в папку игры, а не сюда, но на всякий случай:
+bridge.json
+bridge.log
+*.log
+*.tmp
+
+# Снимки экрана из проверок
+.shot-*.png
+
+# Редакторы и система
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
